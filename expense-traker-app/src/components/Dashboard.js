@@ -28,7 +28,7 @@ const Dashboard = () => {
   };
 
   const deleteExpense = (index) => {
-    setExpenses(expenses.filter((_, i) => i !== index));
+    setExpenses(expenses.filter((element, i) => i !== index));
   };
 
   const editExpense = (index) => {

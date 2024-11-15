@@ -8,11 +8,9 @@ const ExpenseForm = ({ onAddExpense, formValues, updateFormValues, noUpdate, set
 
   // Sync form state with formValues only if formValues has values
   useEffect(() => {
-    
       setAmount(formValues.amount || '');
       setDescription(formValues.description || '');
       setCategory(formValues.category || '');
-    
   }, [formValues]);
 
   const handleSubmit = (e) => {
