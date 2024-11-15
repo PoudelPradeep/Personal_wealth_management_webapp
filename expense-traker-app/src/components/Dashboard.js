@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ExpenseForm from './ExpenseForm';
+import ExpenseForm from '../components/ExpenseForm';
 
 const Dashboard = () => {
   const [expenses, setExpenses] = useState([]);
@@ -9,9 +9,10 @@ const Dashboard = () => {
   };
 
   return (
-    <div>
+    <div style={{ padding: '20px' }}>
       <h2>Dashboard</h2>
       <ExpenseForm onAddExpense={addExpense} />
+      <h3>Your Expenses</h3>
       <ul>
         {expenses.map((expense, index) => (
           <li key={index}>
