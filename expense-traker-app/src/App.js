@@ -10,16 +10,16 @@ import './styles.css';
 
 function App() {
   return (
-    <Router>
+    <>
       <Header />
       <Routes>
-        <Route exact path="/" component={Home} />
-        <Route path="/login" component={Login} />
-        <Route path="/signup" component={Signup} />
-        <Route path="/dashboard" component={Dashboard} />
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
       <Footer />
-    </Router>
+    </>
   );
 }
 

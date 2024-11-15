@@ -6,27 +6,31 @@ const Signup = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you would make an API call for signup
+    // Implement signup functionality here
+    console.log('Signing up with:', email, password);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />
-      <button type="submit">Signup</button>
-    </form>
+    <div style={{ padding: '20px' }}>
+      <h2>Signup</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <button type="submit">Sign Up</button>
+      </form>
+    </div>
   );
 };
 
