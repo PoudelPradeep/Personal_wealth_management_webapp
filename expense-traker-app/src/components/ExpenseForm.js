@@ -1,16 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import "../styles.css";
 
-const ExpenseForm = ({ onAddExpense }) => {
+const ExpenseForm = ({ onAddExpense, formValues, updateFormValues, noUpdate, setUpdate }) => {
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
 
+  // Sync form state with formValues only if formValues has values
+  useEffect(() => {
+    
+      setAmount(formValues.amount || '');
+      setDescription(formValues.description || '');
+      setCategory(formValues.category || '');
+    
+  }, [formValues]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     onAddExpense({ amount, description, category });
+
+    // Reset local state after submission
     setAmount('');
     setDescription('');
     setCategory('');
+    setUpdate(false); // Switch to "Add Expense" mode
   };
 
   return (
@@ -19,19 +32,28 @@ const ExpenseForm = ({ onAddExpense }) => {
         type="number"
         placeholder="Amount"
         value={amount}
-        onChange={(e) => setAmount(e.target.value)}
+        onChange={(e) => {
+          setAmount(e.target.value);
+          updateFormValues('amount', e.target.value);
+        }}
         required
       />
       <input
         type="text"
         placeholder="Description"
         value={description}
-        onChange={(e) => setDescription(e.target.value)}
+        onChange={(e) => {
+          setDescription(e.target.value);
+          updateFormValues('description', e.target.value);
+        }}
         required
       />
       <select
         value={category}
-        onChange={(e) => setCategory(e.target.value)}
+        onChange={(e) => {
+          setCategory(e.target.value);
+          updateFormValues('category', e.target.value);
+        }}
         required
       >
         <option value="">Select Category</option>
@@ -62,12 +84,11 @@ const ExpenseForm = ({ onAddExpense }) => {
           <option value="Dental Care">Dental Care</option>
           <option value="Vision Care">Vision Care</option>
         </optgroup>
-        {/* Continue adding more categories in similar groups */}
         <optgroup label="Miscellaneous">
           <option value="Miscellaneous">Miscellaneous</option>
         </optgroup>
       </select>
-      <button type="submit">Add Expense</button>
+      <button type="submit">{noUpdate ? 'Update Expense' : 'Add Expense'}</button>
     </form>
   );
 };
