@@ -2,7 +2,7 @@
 const Expense = require('../models/Expense');
 
 // Add a new expense
-exports.addExpense = async (req, res) => {
+exports.addExpense = async (req, res, next) => {
   try {
     const { name, amount, category } = req.body;
     const expense = new Expense({
@@ -12,51 +12,57 @@ exports.addExpense = async (req, res) => {
       category,
     });
     await expense.save();
-    res.status(201).json(expense);
+    res.status(201).json({ success: true, expense });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    next(error);
   }
 };
 
 // Get all expenses for a user
-exports.getExpenses = async (req, res) => {
+exports.getExpenses = async (req, res, next) => {
   try {
     const expenses = await Expense.find({ userId: req.user.userId });
-    res.json(expenses);
+    res.json({ success: true, expenses });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
 // Update an expense
-exports.updateExpense = async (req, res) => {
+exports.updateExpense = async (req, res, next) => {
   try {
     const expense = await Expense.findOneAndUpdate(
       { _id: req.params.id, userId: req.user.userId },
       req.body,
       { new: true }
     );
-    if (!expense)
-      return res.status(404).json({ error: 'Expense not found' });
+    if (!expense) {
+      return res
+        .status(404)
+        .json({ success: false, message: 'Expense not found' });
+    }
 
-    res.json(expense);
+    res.json({ success: true, expense });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    next(error);
   }
 };
 
 // Delete an expense
-exports.deleteExpense = async (req, res) => {
+exports.deleteExpense = async (req, res, next) => {
   try {
     const expense = await Expense.findOneAndDelete({
       _id: req.params.id,
       userId: req.user.userId,
     });
-    if (!expense)
-      return res.status(404).json({ error: 'Expense not found' });
+    if (!expense) {
+      return res
+        .status(404)
+        .json({ success: false, message: 'Expense not found' });
+    }
 
-    res.json({ message: 'Expense deleted' });
+    res.json({ success: true, message: 'Expense deleted' });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
