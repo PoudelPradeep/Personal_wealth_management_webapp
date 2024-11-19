@@ -9,9 +9,11 @@ const {
 } = require('../controllers/expenseController');
 const { authMiddleware } = require('../middleware/authMiddleware');
 
-router.post('/', authMiddleware, addExpense);
-router.get('/', authMiddleware, getExpenses);
-router.put('/:id', authMiddleware, updateExpense);
-router.delete('/:id', authMiddleware, deleteExpense);
+router.use(authMiddleware); // Protect all routes below
+
+router.post('/', addExpense);
+router.get('/', getExpenses);
+router.put('/:id', updateExpense);
+router.delete('/:id', deleteExpense);
 
 module.exports = router;
