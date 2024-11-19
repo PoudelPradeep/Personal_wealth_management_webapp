@@ -13,18 +13,18 @@ function Register() {
 
   const { name, username, email, password } = formData;
 
-  const onChange = e => {
+  const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const onSubmit = async e => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/users/register', formData);
+      await axios.post(`${process.env.REACT_APP_API_URL}/users/register`, formData);
       alert('Registration successful');
       window.location.href = '/';
     } catch (error) {
-      alert(error.response.data.error);
+      alert(error.response.data.message || 'Registration failed');
     }
   };
 
@@ -85,7 +85,8 @@ function Register() {
           Already have an account?{' '}
           <a href="/" className="text-primary">
             Login here
-          </a>.
+          </a>
+          .
         </p>
       </Card>
     </Container>

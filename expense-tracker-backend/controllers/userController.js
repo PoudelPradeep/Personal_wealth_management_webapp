@@ -1,4 +1,6 @@
 // controllers/userController.js
+require('dotenv').config(); // Add this line at the top
+
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -34,6 +36,8 @@ exports.registerUser = async (req, res, next) => {
 // Login user
 exports.loginUser = async (req, res, next) => {
   try {
+
+    console.log('JWT_SECRET:', process.env.JWT_SECRET); 
     const { username, password } = req.body;
     const user = await User.findOne({ username });
 

@@ -1,29 +1,56 @@
 // src/components/Login.js
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { Form, Button, Container, Card } from 'react-bootstrap';
+import { AuthContext } from '../context/AuthContext';
 
 function Login() {
+  console.log('Login component rendered'); // Initial render check
+
+  const { setAuth } = useContext(AuthContext);
+  console.log('AuthContext initialized', setAuth); // Debug AuthContext
+
   const [formData, setFormData] = useState({
     username: '',
     password: '',
   });
 
+  console.log('Initial formData state', formData); // Debug initial form data state
+
   const { username, password } = formData;
 
-  const onChange = e => {
+  const onChange = (e) => {
+    console.log(`onChange triggered for ${e.target.name}`, e.target.value); // Log input changes
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    console.log('Updated formData state', formData); // Debug updated form data
   };
 
-  const onSubmit = async e => {
+  const onSubmit = async (e) => {
+    console.log('Form submission initiated'); // Form submission check
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:5000/api/users/login', formData);
-      localStorage.setItem('token', res.data.token);
+      console.log('Sending login request to API with data:', formData); // Log API request data
+      console.log('API URL:', process.env.REACT_APP_API_URL); // Log API URL
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}/users/login`,
+        formData,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log('Login response received:', res); // Log API response
+
       localStorage.setItem('userId', res.data.userId);
+      console.log('userId saved to localStorage:', res.data.userId); // Confirm localStorage save
+
+      setAuth({ token: 'logged_in', userId: res.data.userId });
+      console.log('AuthContext updated with token and userId'); // Debug AuthContext update
+
       window.location.href = '/dashboard';
+      console.log('Redirecting to /dashboard'); // Confirm redirection
     } catch (error) {
-      alert(error.response.data.error);
+      console.error('Login failed:', error.response?.data || error.message); // Log API errors
+      alert(error.response?.data?.message || 'Login failed');
     }
   };
 
@@ -62,7 +89,8 @@ function Login() {
           Don't have an account?{' '}
           <a href="/register" className="text-primary">
             Register here
-          </a>.
+          </a>
+          .
         </p>
       </Card>
     </Container>
